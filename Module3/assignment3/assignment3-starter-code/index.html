@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" ng-app="NarrowItDownApp">
+  <head>
+    <title>Narrow Down Your Menu Choice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <style>
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        margin: 20px auto;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .empty-message {
+        font-weight: bold;
+        color: #d9534f;
+        font-size: 1.2em;
+        margin-top: 20px;
+      }
+      .found-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+<body>
+   <div class="container" ng-controller="NarrowItDownController as narrow">
+    <h1>Narrow Down Your Chinese Menu Choice</h1>
+
+    <div class="form-group">
+      <input type="text" placeholder="search term" class="form-control" ng-model="narrow.searchTerm">
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" ng-click="narrow.narrowItDown()">Narrow It Down For Me!</button>
+    </div>
+
+    <div ng-if="narrow.loading" class="loader"></div>
+    
+    <div class="found-items">
+      <div ng-if="narrow.found.length === 0 && !narrow.loading" class="empty-message">
+        Nothing found
+      </div>
+      <ul class="list-group" ng-if="narrow.found.length > 0">
+        <li class="list-group-item" ng-repeat="item in narrow.found">
+          <strong>{{ item.name }}</strong> ({{ item.short_name }}) - {{ item.description }}
+          <button class="btn btn-danger btn-sm pull-right" ng-click="narrow.removeItem($index)">
+            Don't want this one!
+          </button>
+          <div class="clearfix"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+(function() {
+  'use strict';
+  
+  angular.module('NarrowItDownApp', [])
+    .controller('NarrowItDownController', NarrowItDownController)
+    .service('MenuSearchService', MenuSearchService);
+    
+  NarrowItDownController.$inject = ['MenuSearchService'];
+  function NarrowItDownController(MenuSearchService) {
+    var narrow = this;
+    narrow.found = [];
+    narrow.searchTerm = '';
+    narrow.loading = false;
+    
+    narrow.narrowItDown = function() {
+      if (!narrow.searchTerm) {
+        narrow.found = [];
+        return;
+      }
+      
+      narrow.loading = true;
+      narrow.found = [];
+      
+      MenuSearchService.getMatchedMenuItems(narrow.searchTerm)
+        .then(function(foundItems) {
+          narrow.found = foundItems;
+        })
+        .finally(function() {
+          narrow.loading = false;
+        });
+    };
+    
+    narrow.removeItem = function(index) {
+      narrow.found.splice(index, 1);
+    };
+  }
+  
+  MenuSearchService.$inject = ['$http'];
+  function MenuSearchService($http) {
+    var service = this;
+    
+    service.getMatchedMenuItems = function(searchTerm) {
+      return $http({
+        method: 'GET',
+        url: 'https://coursera-jhu-default-rtdb.firebaseio.com/menu_items.json'
+      }).then(function(result) {
+        var foundItems = [];
+        var menuItems = result.data;
+        
+        for (var category in menuItems) {
+          if (menuItems.hasOwnProperty(category)) {
+            var items = menuItems[category].menu_items;
+            for (var i = 0; i < items.length; i++) {
+              var item = items[i];
+              if (item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
+                foundItems.push(item);
+              }
+            }
+          }
+        }
+        
+        return foundItems;
+      });
+    };
+  }
+  
+})();
+</script>
+
+</body>
+</html>

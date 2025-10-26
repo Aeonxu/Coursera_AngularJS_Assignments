@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" ng-app="LunchCheck">
+  <head>
+    <title>Lunch Checker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <style>
+      .message { font-size: 1.3em; font-weight: bold; }
+      .green { color: green; border-color: green; }
+      .red { color: red; border-color: red; }
+    </style>
+  </head>
+<body>
+   <div class="container" ng-controller="LunchCheckController">
+     <h1>Lunch Checker</h1>
+
+         <div class="form-group">
+             <input id="lunch-menu" type="text"
+             placeholder="list comma separated dishes you usually have for lunch"
+             class="form-control" ng-class="inputStyle"
+             ng-model="lunchItems">
+         </div>
+         <div class="form-group">
+             <button class="btn btn-default" ng-click="checkIfTooMuch()">Check If Too Much</button>
+         </div>
+         <div class="form-group message" ng-class="messageStyle">
+           {{message}}
+         </div>
+   </div>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+   <script>
+    (function() {
+      'use strict';
+      
+      angular.module('LunchCheck', [])
+        .controller('LunchCheckController', LunchCheckController);
+        
+      LunchCheckController.$inject = ['$scope'];
+      
+      function LunchCheckController($scope) {
+        $scope.lunchItems = '';
+        $scope.message = '';
+        
+        $scope.checkIfTooMuch = function() {
+          var items = $scope.lunchItems.split(',');
+          var count = 0;
+          
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].trim() !== '') {
+              count++;
+            }
+          }
+          
+          if ($scope.lunchItems.trim() === '') {
+            $scope.message = 'Please enter data first';
+            $scope.messageStyle = 'red';
+            $scope.inputStyle = 'red';
+          } else if (count <= 3) {
+            $scope.message = 'Enjoy!';
+            $scope.messageStyle = 'green';
+            $scope.inputStyle = 'green';
+          } else {
+            $scope.message = 'Too much!';
+            $scope.messageStyle = 'green';
+            $scope.inputStyle = 'green';
+          }
+        };
+      }
+    })();
+   </script>
+</body>
+</html>

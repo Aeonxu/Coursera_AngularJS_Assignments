@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en" ng-app="ShoppingListCheckOff">
+  <head>
+    <title>Shopping List Check Off</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <style>
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
+    </style>
+  </head>
+<body>
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
+
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div class="col-md-6" ng-controller="ToBuyController as toBuy">
+     <h2>To Buy:</h2>
+     <ul>
+       <li ng-repeat="item in toBuy.items">
+         Buy {{ item.quantity }} {{ item.name }} 
+         <button class="btn btn-default" ng-click="toBuy.buyItem($index)">
+           <span class="glyphicon glyphicon-ok"></span> Bought
+         </button>
+       </li>
+     </ul>
+     <div class="emptyMessage" ng-if="toBuy.items.length === 0">Everything is bought!</div>
+    </div>
+
+    <!-- Already Bought List -->
+    <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
+     <h2>Already Bought:</h2>
+     <ul>
+       <li ng-repeat="item in bought.items">
+         Bought {{ item.quantity }} {{ item.name }}
+       </li>
+     </ul>
+     <div class="emptyMessage" ng-if="bought.items.length === 0">Nothing bought yet.</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+(function() {
+  'use strict';
+  
+  angular.module('ShoppingListCheckOff', [])
+    .service('ShoppingListCheckOffService', ShoppingListCheckOffService)
+    .controller('ToBuyController', ToBuyController)
+    .controller('AlreadyBoughtController', AlreadyBoughtController);
+    
+  ShoppingListCheckOffService.$inject = [];
+  function ShoppingListCheckOffService() {
+    var service = this;
+    
+    var toBuyItems = [
+      { name: "cookies", quantity: 10 },
+      { name: "apples", quantity: 5 },
+      { name: "bananas", quantity: 8 },
+      { name: "milk", quantity: 2 },
+      { name: "eggs", quantity: 12 },
+      { name: "chocolates", quantity: 6 },
+      { name: "bread", quantity: 1 },
+      { name: "cheese", quantity: 3 },
+      { name: "carrots", quantity: 4 },
+      { name: "tomatoes", quantity: 7 },
+    ];
+    
+    var boughtItems = [];
+    
+    service.getToBuyItems = function() {
+      return toBuyItems;
+    };
+    
+    service.getBoughtItems = function() {
+      return boughtItems;
+    };
+    
+    service.buyItem = function(itemIndex) {
+      var item = toBuyItems[itemIndex];
+      toBuyItems.splice(itemIndex, 1);
+      boughtItems.push(item);
+    };
+  }
+  
+  ToBuyController.$inject = ['ShoppingListCheckOffService'];
+  function ToBuyController(ShoppingListCheckOffService) {
+    var toBuy = this;
+    
+    toBuy.items = ShoppingListCheckOffService.getToBuyItems();
+    
+    toBuy.buyItem = function(itemIndex) {
+      ShoppingListCheckOffService.buyItem(itemIndex);
+    };
+  }
+  
+  AlreadyBoughtController.$inject = ['ShoppingListCheckOffService'];
+  function AlreadyBoughtController(ShoppingListCheckOffService) {
+    var bought = this;
+    
+    bought.items = ShoppingListCheckOffService.getBoughtItems();
+  }
+  
+})();
+</script>
+</body>
+</html>
