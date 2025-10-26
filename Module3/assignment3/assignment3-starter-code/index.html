@@ -3,57 +3,254 @@
   <head>
     <title>Narrow Down Your Menu Choice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #fef6e4 0%, #fff9f0 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #5c3317;
+      }
+      
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(139, 0, 0, 0.1);
+        border: 2px solid #d4af37;
+        overflow: hidden;
+      }
+      
+      h1 {
+        text-align: center;
+        padding: 30px 20px;
+        background: linear-gradient(135deg, #8b0000 0%, #a52a2a 100%);
+        color: #d4af37;
+        font-size: 2.5em;
+        font-weight: 600;
+        margin: 0;
+        border-bottom: 3px solid #d4af37;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .form-group {
+        padding: 30px;
+        background: #fffaf0;
+      }
+      
+      .form-control {
+        border: 2px solid #d4af37;
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 1.1em;
+        font-family: 'Poppins', sans-serif;
+        background: #fffef9;
+        transition: all 0.3s ease;
+      }
+      
+      .form-control:focus {
+        border-color: #8b0000;
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        outline: none;
+      }
+      
+      .form-control::placeholder {
+        color: #a52a2a;
+        opacity: 0.7;
+      }
+      
+      .narrow-button {
+        text-align: center;
+        padding-top: 10px;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #8b0000 0%, #a52a2a 100%);
+        color: #d4af37;
+        border: 2px solid #d4af37;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1.1em;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 0, 0, 0.2);
+        letter-spacing: 1px;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 0, 0, 0.3);
+        background: linear-gradient(135deg, #a52a2a 0%, #8b0000 100%);
+      }
+      
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+      
       .loader {
         border: 16px solid #f3f3f3;
         border-radius: 50%;
-        border-top: 16px solid #3498db;
+        border-top: 16px solid #8b0000;
         width: 120px;
         height: 120px;
         animation: spin 2s linear infinite;
         margin: 20px auto;
       }
+      
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+      
       .empty-message {
-        font-weight: bold;
-        color: #d9534f;
-        font-size: 1.2em;
-        margin-top: 20px;
+        text-align: center;
+        color: #8b0000;
+        font-size: 1.3em;
+        font-weight: 500;
+        padding: 50px 20px;
+        background: #fffaf0;
+        border: 2px dashed #d4af37;
+        border-radius: 8px;
+        margin: 20px 30px;
+        font-family: 'Poppins', sans-serif;
       }
-      .found-item {
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+      
+      .found-items {
+        padding: 0 30px 30px;
+        background: #fffaf0;
+      }
+      
+      .list-group-item {
+        background: white;
+        border: 2px solid #d4af37;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(139, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 0, 0, 0.15);
+        border-color: #8b0000;
+      }
+      
+      .list-group-item strong {
+        color: #8b0000;
+        font-size: 1.2em;
+        display: block;
+        margin-bottom: 5px;
+      }
+      
+      .btn-danger {
+        background: linear-gradient(135deg, #8b0000 0%, #a52a2a 100%);
+        color: white;
+        border: 2px solid #d4af37;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        float: right;
+      }
+      
+      .btn-danger:hover {
+        background: linear-gradient(135deg, #a52a2a 0%, #8b0000 100%);
+        transform: scale(1.05);
+      }
+      
+      .clearfix {
+        clear: both;
+      }
+      
+      /* Chinese decorative elements */
+      .container::before {
+        content: "福";
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        width: 80px;
+        height: 80px;
+        background: #8b0000;
+        color: #d4af37;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        transform: rotate(15deg);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 1;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2em;
+          padding: 25px 15px;
+        }
+        
+        .form-group {
+          padding: 20px;
+        }
+        
+        .found-items {
+          padding: 0 20px 20px;
+        }
+        
+        .list-group-item {
+          text-align: center;
+        }
+        
+        .btn-danger {
+          float: none;
+          margin-top: 10px;
+          width: 100%;
+        }
+        
+        .container::before {
+          display: none;
+        }
       }
     </style>
   </head>
 <body>
    <div class="container" ng-controller="NarrowItDownController as narrow">
-    <h1>Narrow Down Your Chinese Menu Choice</h1>
+    <h1>🥢 Narrow Down Your Chinese Menu Choice 🥢</h1>
 
     <div class="form-group">
-      <input type="text" placeholder="search term" class="form-control" ng-model="narrow.searchTerm">
+      <input type="text" placeholder="Enter search keywords..." class="form-control" ng-model="narrow.searchTerm">
     </div>
-    <div class="form-group">
-      <button class="btn btn-primary" ng-click="narrow.narrowItDown()">Narrow It Down For Me!</button>
+    <div class="form-group narrow-button">
+      <button class="btn btn-primary" ng-click="narrow.narrowItDown()">🔍 Narrow It Down For Me!</button>
     </div>
 
     <div ng-if="narrow.loading" class="loader"></div>
     
     <div class="found-items">
       <div ng-if="narrow.found.length === 0 && !narrow.loading" class="empty-message">
-        Nothing found
+        🍜 Nothing found
       </div>
       <ul class="list-group" ng-if="narrow.found.length > 0">
         <li class="list-group-item" ng-repeat="item in narrow.found">
           <strong>{{ item.name }}</strong> ({{ item.short_name }}) - {{ item.description }}
-          <button class="btn btn-danger btn-sm pull-right" ng-click="narrow.removeItem($index)">
-            Don't want this one!
+          <button class="btn-danger" ng-click="narrow.removeItem($index)">
+            ❌ Don't want this one!
           </button>
           <div class="clearfix"></div>
         </li>

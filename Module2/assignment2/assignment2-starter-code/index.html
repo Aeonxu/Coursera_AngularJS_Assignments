@@ -3,57 +3,236 @@
   <head>
     <title>Shopping List Check Off</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-      .emptyMessage {
-        font-weight: bold;
-        color: red;
-        font-size: 1.2em;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
+      
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f0e6ff;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+      }
+      
+      h1 {
+        text-align: center;
+        padding: 30px 20px;
+        background: white;
+        color: #8b5cf6;
+        font-size: 2.8em;
+        font-weight: 600;
+        margin: 0;
+        border-bottom: 3px solid #f0e6ff;
+      }
+      
+      .row {
+        display: flex;
+        min-height: 500px;
+      }
+      
+      .col-md-6 {
+        flex: 1;
+        padding: 35px;
+      }
+      
+      .col-md-6:first-child {
+        background: #fafafa;
+        border-right: 2px dashed #e2d8ff;
+      }
+      
+      .col-md-6:last-child {
+        background: #fefefe;
+      }
+      
+      h2 {
+        color: #7c3aed;
+        font-size: 1.8em;
+        font-weight: 500;
+        margin-bottom: 25px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #ddd6fe;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      h2:before {
+        content: "•";
+        color: #8b5cf6;
+        font-size: 1.5em;
+      }
+      
+      ul {
+        list-style: none;
+      }
+      
       li {
-        margin-bottom: 7px;
-        font-size: 1.2em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 22px;
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        border: 2px solid #f0e6ff;
+        transition: all 0.3s ease;
+        font-size: 1.1em;
+        color: #6d28d9;
       }
-      li > button {
-        margin-left: 6px;
+      
+      li:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(139, 92, 246, 0.15);
+        border-color: #ddd6fe;
       }
-      button > span {
-        color: green;
+      
+      .col-md-6:last-child li {
+        background: #f8f5ff;
+        border-color: #e2d8ff;
+        color: #7c3aed;
+      }
+      
+      button {
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 0.95em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      }
+      
+      button:hover {
+        background: #7c3aed;
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
+      }
+      
+      button:active {
+        transform: translateY(0) scale(1);
+      }
+      
+      .emptyMessage {
+        text-align: center;
+        color: #a78bfa;
+        font-size: 1.4em;
+        font-weight: 400;
+        padding: 70px 20px;
+        background: white;
+        border-radius: 15px;
+        border: 3px dashed #ddd6fe;
+        margin-top: 20px;
+      }
+      
+      .col-md-6:last-child .emptyMessage {
+        background: #f8f5ff;
+      }
+      
+      @media (max-width: 768px) {
+        .row {
+          flex-direction: column;
+        }
+        
+        .col-md-6:first-child {
+          border-right: none;
+          border-bottom: 2px dashed #e2d8ff;
+        }
+        
+        h1 {
+          font-size: 2.2em;
+          padding: 25px 20px;
+        }
+        
+        li {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+          padding: 20px;
+        }
+        
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      
+      /* Cute decorative elements */
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 100px;
+        height: 100px;
+        background: #f0e6ff;
+        border-radius: 50%;
+        z-index: -1;
+      }
+      
+      .container::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        left: -30px;
+        width: 60px;
+        height: 60px;
+        background: #f0e6ff;
+        border-radius: 50%;
+        z-index: -1;
       }
     </style>
   </head>
 <body>
   <div class="container">
-  <h1>Shopping List Check Off</h1>
+    <h1>🛒 Shopping List Check Off</h1>
 
-  <div class="row">
+    <div class="row">
+      <!-- To Buy List -->
+      <div class="col-md-6" ng-controller="ToBuyController as toBuy">
+        <h2>To Buy ✨</h2>
+        <ul>
+          <li ng-repeat="item in toBuy.items">
+            <span>Buy {{ item.quantity }} {{ item.name }}</span>
+            <button ng-click="toBuy.buyItem($index)">
+              <span>✅</span> Bought
+            </button>
+          </li>
+        </ul>
+        <div class="emptyMessage" ng-if="toBuy.items.length === 0">🎉 Everything is bought! 🎉</div>
+      </div>
 
-    <!-- To Buy List -->
-    <div class="col-md-6" ng-controller="ToBuyController as toBuy">
-     <h2>To Buy:</h2>
-     <ul>
-       <li ng-repeat="item in toBuy.items">
-         Buy {{ item.quantity }} {{ item.name }} 
-         <button class="btn btn-default" ng-click="toBuy.buyItem($index)">
-           <span class="glyphicon glyphicon-ok"></span> Bought
-         </button>
-       </li>
-     </ul>
-     <div class="emptyMessage" ng-if="toBuy.items.length === 0">Everything is bought!</div>
-    </div>
-
-    <!-- Already Bought List -->
-    <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
-     <h2>Already Bought:</h2>
-     <ul>
-       <li ng-repeat="item in bought.items">
-         Bought {{ item.quantity }} {{ item.name }}
-       </li>
-     </ul>
-     <div class="emptyMessage" ng-if="bought.items.length === 0">Nothing bought yet.</div>
+      <!-- Already Bought List -->
+      <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
+        <h2>Already Bought 🌟</h2>
+        <ul>
+          <li ng-repeat="item in bought.items">
+            Bought {{ item.quantity }} {{ item.name }}
+          </li>
+        </ul>
+        <div class="emptyMessage" ng-if="bought.items.length === 0">📝 Nothing bought yet</div>
+      </div>
     </div>
   </div>
-</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <script>
@@ -70,16 +249,16 @@
     var service = this;
     
     var toBuyItems = [
-      { name: "cookies", quantity: 10 },
-      { name: "apples", quantity: 5 },
-      { name: "bananas", quantity: 8 },
-      { name: "milk", quantity: 2 },
-      { name: "eggs", quantity: 12 },
-      { name: "chocolates", quantity: 6 },
-      { name: "bread", quantity: 1 },
-      { name: "cheese", quantity: 3 },
-      { name: "carrots", quantity: 4 },
-      { name: "tomatoes", quantity: 7 },
+      { name: "cookies 🍪", quantity: 10 },
+      { name: "apples 🍎", quantity: 5 },
+      { name: "bananas 🍌", quantity: 8 },
+      { name: "milk 🥛", quantity: 2 },
+      { name: "eggs 🥚", quantity: 12 },
+      { name: "chocolates 🍫", quantity: 6 },
+      { name: "bread 🍞", quantity: 1 },
+      { name: "cheese 🧀", quantity: 3 },
+      { name: "carrots 🥕", quantity: 4 },
+      { name: "tomatoes 🍅", quantity: 7 },
     ];
     
     var boughtItems = [];
