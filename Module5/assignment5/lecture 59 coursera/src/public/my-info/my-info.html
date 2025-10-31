@@ -1,0 +1,35 @@
+<div class="container">
+  <h2 class="text-center">My Info</h2>
+
+  <div ng-if="!info.user">
+    <p class="text-center">Not Signed Up Yet. <a ui-sref="public.signup">Sign up Now!</a></p>
+  </div>
+
+  <div ng-if="info.user">
+    <div class="panel panel-default">
+      <div class="panel-heading"><strong>Registered Information</strong></div>
+      <div class="panel-body">
+        <p><strong>First Name:</strong> {{info.user.firstName}}</p>
+        <p><strong>Last Name:</strong> {{info.user.lastName}}</p>
+        <p><strong>Email:</strong> {{info.user.email}}</p>
+        <p><strong>Phone:</strong> {{info.user.phone}}</p>
+        <p><strong>Favorite Item:</strong> {{info.user.favoriteItem}}</p>
+      </div>
+    </div>
+
+    <div class="panel panel-info" ng-if="info.item">
+      <div class="panel-heading"><strong>Favorite Menu Item</strong></div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <img ng-src="{{info.imgUrl}}" alt="Favorite item image" class="img-responsive img-thumbnail">
+          </div>
+          <div class="col-sm-9">
+            <h4>{{info.item.name}}</h4>
+            <p>{{info.item.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
